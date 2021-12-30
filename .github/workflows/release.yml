@@ -2,14 +2,14 @@ name: Release
 
 on:
   push:
-    branches:  
-      - main
+    branches: [ main ]
 
 jobs:
-  windows_build:
+  windows:
     name: "Windows x64 (latest)"
     runs-on: windows-latest
 
+    steps:
     - name: Qt static build
       run: |
         git clone https://code.qt.io/qt/qt5.git -b 5.15.2
