@@ -10,7 +10,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Download Qt 5.15.2
+    - name: Installation Qt 5.15.2
+      uses: jurplel/install-qt-action@v2.13.2
+      with:
+        arch: win64_mingw81
+
+    - name: Download source code
       run: git clone https://code.qt.io/qt/qt5.git -b 5.15.2
       shell: bash
 
