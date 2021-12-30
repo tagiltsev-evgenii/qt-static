@@ -23,48 +23,7 @@ jobs:
       run: |
         cd qt5
         ./init-repository -f --module-subset=qtbase
-        ./configure -static -release -prefix "../qtstatic" \ 
-                            -qt-zlib \
-                            -qt-libpng \
-                            -qt-libjpeg \
-                            -qt-freetype \
-                            -no-opengl \
-                            -skip qt3d \
-                            -skip qtactiveqt \
-                            -skip qtandroidextras \
-                            -skip qtcharts \
-                            -skip qtconnectivity \
-                            -skip qtdatavis3d \ 
-                            -skip qtdeclarative \
-                            -skip qtdoc \
-                            -skip qtgamepad \
-                            -skip qtlocation \
-                            -skip qtlottie \
-                            -skip qtmacextras \
-                            -skip qtmultimedia \
-                            -skip qtnetworkauth \
-                            -skip qtpurchasing \
-                            -skip qtquick3d \
-                            -skip qtquickcontrols \
-                            -skip qtquickcontrols2 \
-                            -skip qtquicktimeline \
-                            -skip qtremoteobjects \
-                            -skip qtscript \
-                            -skip qtsensors \
-                            -skip qtspeech \
-                            -skip qtsvg \
-                            -skip qtwayland \
-                            -skip qtwebglplugin \
-                            -skip qtwebview \
-                            -skip webengine \
-                            -nomake tools \
-                            -nomake tests \
-                            -nomake examples \
-                            -no-dbus \
-                            -no-ssl \
-                            -no-pch \
-                            -opensource \
-                            -confirm-license
+        ./configure -static -release -prefix "../qtstatic" -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -skip qt3d -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtquick3d -nomake tools -nomake tests -nomake examples -no-dbus -no-ssl -no-pch -opensource -confirm-license
         make -j4 && make install
       shell: bash
 
