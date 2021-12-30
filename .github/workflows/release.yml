@@ -10,12 +10,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Qt static build
+    - name: Download Qt 5.15.2
+      run: git clone https://code.qt.io/qt/qt5.git -b 5.15.2
+
+    - name: Build Qt static
       run: |
-        git clone https://code.qt.io/qt/qt5.git -b 5.15.2
         cd qt5
         ./init-repository -f --module-subset=qtbase
-        ./configure -static -release -prefix "../Qt5Static" \ 
+        ./configure -static -release -prefix "../qtstatic" \ 
                             -qt-zlib \
                             -qt-libpng \
                             -qt-libjpeg \
@@ -58,11 +60,16 @@ jobs:
                             -opensource \
                             -confirm-license
         make -j4 && make install
+      shell: bash
 
-      - name: Deploy
+      - name: Archive build
+        run: 7z a qtstatic-widnows-x64.zip .\qtstatic\
+
+
+      - name: Upload artifacts
         uses: ncipollo/release-action@v1
         with:
-          artifacts: qtstatic.zip
+          artifacts: qtstatic-widnows-x64.zip
           token: ${{ secrets.ACCESS_TOKEN }}
           commit: main
           tag: windows-x64
