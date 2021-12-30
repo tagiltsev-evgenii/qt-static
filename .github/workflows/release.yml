@@ -63,15 +63,15 @@ jobs:
         make -j4 && make install
       shell: bash
 
-      - name: Archive build
-        run: 7z a qtstatic-widnows-x64.zip .\qtstatic\
-        shell: bash
+    - name: Archive build
+      run: 7z a qtstatic-widnows-x64.zip .\qtstatic\
+      shell: bash
 
 
-      - name: Upload artifacts
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: qtstatic-widnows-x64.zip
-          token: ${{ secrets.ACCESS_TOKEN }}
-          commit: main
-          tag: windows-x64
+    - name: Upload artifacts
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: qtstatic-widnows-x64.zip
+        token: ${{ secrets.ACCESS_TOKEN }}
+        commit: main
+        tag: windows-x64
