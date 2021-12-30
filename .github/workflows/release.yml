@@ -12,6 +12,7 @@ jobs:
     steps:
     - name: Download Qt 5.15.2
       run: git clone https://code.qt.io/qt/qt5.git -b 5.15.2
+      shell: bash
 
     - name: Build Qt static
       run: |
@@ -64,6 +65,7 @@ jobs:
 
       - name: Archive build
         run: 7z a qtstatic-widnows-x64.zip .\qtstatic\
+        shell: bash
 
 
       - name: Upload artifacts
