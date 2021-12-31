@@ -17,7 +17,7 @@ jobs:
 
     - name: Download source code
       run: | 
-        wget https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
+        curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
         7z e qt-everywhere-src-5.15.2.zip -oqt5
       shell: bash
 
