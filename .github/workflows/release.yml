@@ -18,12 +18,12 @@ jobs:
     - name: Download source code
       run: | 
         curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
-        7z e qt-everywhere-src-5.15.2.zip -oqt5
+        7z x qt-everywhere-src-5.15.2.zip -oqt5
       shell: bash
 
     - name: Configure Qt
       run: |
-        cd qt5
+        cd qt5/qt-everywhere-src-5.15.2
         ./configure -static -release -platform win32-g++ \ 
         -prefix "../qtstatic" \
         -qt-zlib \
