@@ -16,7 +16,9 @@ jobs:
         arch: win64_mingw81
 
     - name: Download source code
-      run: git clone https://code.qt.io/qt/qt5.git -b 5.15.2
+      run: | 
+        wget https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
+        7z e qt-everywhere-src-5.15.2.zip -oqt5
       shell: bash
 
     - name: Configure Qt
