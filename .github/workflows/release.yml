@@ -24,35 +24,17 @@ jobs:
     - name: Configure Qt
       run: |
         cd qt5/qt-everywhere-src-5.15.2
-        ./configure -static -release -platform win32-g++ \ 
-        -prefix "../qtstatic" \
-        -qt-zlib \
-        -qt-libpng \
-        -qt-libjpeg \
-        -qt-freetype \ 
-        -skip qt3d \
-        -skip qtdatavis3d \
-        -skip qtdoc \
-        -skip qtgamepad \
-        -skip qtquick3d \ 
-        -nomake tools \
-        -nomake tests \
-        -nomake examples \
-        -no-dbus \
-        -no-ssl \
-        -no-pch \
-        -opensource \
-        -confirm-license
+        ./configure -static -release -platform win32-g++ -prefix "../qtstatic" -qt-zlib -qt-libpng -qt-libjpeg -qt-freetype -skip qt3d -skip qtdatavis3d -skip qtdoc -skip qtgamepad -skip qtquick3d -nomake tools -nomake tests -nomake examples -no-dbus -no-ssl -no-pch -opensource -confirm-license
       shell: bash
 
     - name: Build Qt static
       run: | 
-        cd qt5
+        cd qt5/qt-everywhere-src-5.15.2
         mingw32-make -j4
       shell: bash
 
     - name: Archive build
-      run: 7z a qtstatic-widnows-x64.zip .\qtstatic\
+      run: 7z a qtstatic-widnows-x64.zip qt5/qtstatic/
       shell: bash
 
 
