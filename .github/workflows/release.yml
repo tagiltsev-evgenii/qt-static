@@ -15,9 +15,8 @@ jobs:
     steps:
     - name: Installing MSYS2
       uses: msys2/setup-msys2@v2
-
-    - name: Downloading Qt 5.15.2
-      run: yes | pacman -S mingw-w64-i686-qt5-static
+      with:
+        install: mingw-w64-i686-qt5-static
 
     - name: Checking build system
       run: |
