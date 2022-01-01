@@ -20,5 +20,5 @@ jobs:
 
     - name: Checking build system
       run: |
-        qmake -v
+        D:/a/_temp/msys64/mingw32/qt5-static/bin/qmake.exe -v
         mingw32-make -v
