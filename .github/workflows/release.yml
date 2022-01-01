@@ -26,4 +26,4 @@ jobs:
     - name: Checking build system
       run: |
         D:/a/_temp/msys64/mingw32/qt5-static/bin/qmake.exe -v
-        D:/a/_temp/msys64/mingw32/qt5-static/bin/mingw32-make -v
+        mingw-w64-x86_64-make -v
