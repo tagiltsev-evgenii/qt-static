@@ -22,8 +22,9 @@ jobs:
           mingw-w64-x86_64-clang
           mingw-w64-x86_64-gcc
           mingw-w64-x86_64-make
+          base-devel
 
     - name: Checking build system
       run: |
         D:/a/_temp/msys64/mingw32/qt5-static/bin/qmake.exe -v
-        mingw-w64-x86_64-make -v
+        make --version
