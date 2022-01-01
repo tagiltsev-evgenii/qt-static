@@ -17,7 +17,7 @@ jobs:
       uses: msys2/setup-msys2@v2
 
     - name: Downloading Qt 5.15.2
-      run: pacman -Syu mingw-w64-i686-qt5-static
+      run: yes | pacman -S mingw-w64-i686-qt5-static
 
     - name: Checking build system
       run: |
