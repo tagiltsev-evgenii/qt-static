@@ -8,8 +8,18 @@ jobs:
   windows:
     name: "Windows x64 (latest)"
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
 
     steps:
+    - name: Installing MSYS2
+      uses: msys2/setup-msys2@v2
+
     - name: Downloading Qt 5.15.2
       run: pacman -S mingw-w64-i686-qt5-static
-      shell: bash
+
+    - name: Checking build system
+      run: |
+        qmake -v
+        mingw32-make -v
