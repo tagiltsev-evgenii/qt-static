@@ -24,7 +24,7 @@ jobs:
         7z x qt-everywhere-src-5.15.2.zip -oqt5
 
     - name: Configure
-      run: ./qt5/qt-everywhere-src-5.15.2/configure -opensource -confirm-license -static -platform win32-g++ -opengl desktop -prefix "../mingw32-x64-qt-static" -skip webengine nomake tests -nomake examples
+      run: ./qt5/qt-everywhere-src-5.15.2/configure -opensource -confirm-license -static -platform win32-g++ -opengl desktop -prefix "../mingw32-x64-qt-static" -skip webengine -nomake tests -nomake examples
 
     - name: Build Qt 5.15.2 static
       run: |
