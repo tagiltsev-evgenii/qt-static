@@ -10,21 +10,51 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: msys2 {0}
+        shell: bash
 
     steps:
-    - name: Installing MSYS2
-      uses: msys2/setup-msys2@v2
+    - name: Installing Qt Creator
+      uses: jurplel/install-qt-action@v2
       with:
-        install: | 
-          mingw-w64-i686-qt5-static 
-          mingw-w64-i686-toolchain 
-          mingw-w64-x86_64-clang
-          mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-make
-          base-devel
+        arch: 'win64_mingw81'
 
-    - name: Checking build system
+    - name: Download sources of Qt 5.15.2
       run: |
-        D:/a/_temp/msys64/mingw32/qt5-static/bin/qmake.exe -v
-        make --version
+        curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
+        7z x qt-everywhere-src-5.15.2.zip -oqt5
+
+    - name: Configure
+      run: ./qt5/qt-everywhere-src-5.15.2/configure -opensource -confirm-license -static -platform win32-g++ -opengl desktop -prefix "../mingw32-x64-qt-static" -skip webengine nomake tests -nomake examples
+
+    - name: Build Qt 5.15.2 static
+      run: |
+        mingw32-make -j8
+        mingw32-make install
+        cd ./qt5/mingw32-x64-qt-static
+        mingw32-make clean
+
+    - name: Deploy
+      run: |
+        cd qt5
+        7z a mingw32-x64-qt-static.zip ./mingw32-x64-qt-static
+
+    - name: Upload Qt 5.15.2 static
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: ./qt5/mingw32-x64-qt-static.zip
+        token: ${{ secrets.ACCESS_TOKEN }}
+        commit: main
+        tag: windows-${{ env.PACKAGE_NAME }}
+
+  # linux:
+  #   name: "Ubuntu x64 (latest)"
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Installing Qt Creator
+  #     uses: jurplel/install-qt-action@v2
+
+  #   - name: Download sources of Qt 5.15.2
+  #     run: |
+  #       curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
+  #       tar -xf qt-everywhere-src-5.15.2.tar.xz -C ./qt5
