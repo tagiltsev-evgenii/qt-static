@@ -23,14 +23,23 @@ jobs:
         curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
         7z x qt-everywhere-src-5.15.2.zip -oqt5
 
+    - name: Patch qmake.conf
+      run: |
+        cd ./qt5/qt-everywhere-src-5.15.2/qtbase/mkspecs/win32-g++/
+        echo QMAKE_LFLAGS += -static -static-libgcc >> qmake.conf
+        echo QMAKE_CFLAGS_RELEASE -= -O2 >> qmake.conf
+        echo QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer >> qmake.conf
+        echo DEFINES += QT_STATIC_BUILD >> qmake.conf
+
     - name: Configure
       run: ./qt5/qt-everywhere-src-5.15.2/configure -opensource -confirm-license -static -platform win32-g++ -no-opengl -prefix "../mingw32-x64-qt-static" -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtspeech -skip qtwayland -skip qtwebglplugin -skip qtwebview -skip webengine -make libs -nomake tools -nomake examples -nomake tests
 
     - name: Build Qt 5.15.2 static
       run: |
-        mingw32-make -j8
+        cd ./qt5/qt-everywhere-src-5.15.2
+        mingw32-make -j4
         mingw32-make install
-        cd ./qt5/mingw32-x64-qt-static
+        cd ../mingw32-x64-qt-static
         mingw32-make clean
 
     - name: Deploy
@@ -44,17 +53,49 @@ jobs:
         artifacts: ./qt5/mingw32-x64-qt-static.zip
         token: ${{ secrets.ACCESS_TOKEN }}
         commit: main
-        tag: windows-${{ env.PACKAGE_NAME }}
+        tag: mingw32-x64-qt-5.15.2-static
 
-  # linux:
-  #   name: "Ubuntu x64 (latest)"
-  #   runs-on: ubuntu-latest
+  linux:
+    name: "Ubuntu x64 (latest)"
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #   - name: Installing Qt Creator
-  #     uses: jurplel/install-qt-action@v2
+    steps:
+    - name: Installing Qt Creator
+      uses: jurplel/install-qt-action@v2
 
-  #   - name: Download sources of Qt 5.15.2
-  #     run: |
-  #       curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
-  #       tar -xf qt-everywhere-src-5.15.2.tar.xz -C ./qt5
+    - name: Download sources of Qt 5.15.2
+      run: |
+        curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz
+        tar -xf qt-everywhere-src-5.15.2.tar.xz -C ./qt5
+
+    - name: Patch qmake.conf
+      run: |
+        cd ./qt5/qt-everywhere-src-5.15.2/qtbase/mkspecs/win32-g++/
+        echo QMAKE_LFLAGS += -static -static-libgcc >> qmake.conf
+        echo QMAKE_CFLAGS_RELEASE -= -O2 >> qmake.conf
+        echo QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer >> qmake.conf
+        echo DEFINES += QT_STATIC_BUILD >> qmake.conf
+
+    - name: Configure
+      run: ./qt5/qt-everywhere-src-5.15.2/configure -opensource -confirm-license -static -platform linux-g++ -no-opengl -prefix "../gcc-x64-qt-static" -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtspeech -skip qtwayland -skip qtwebglplugin -skip qtwebview -skip webengine -make libs -nomake tools -nomake examples -nomake tests
+
+    - name: Build Qt 5.15.2 static
+      run: |
+        cd ./qt5/qt-everywhere-src-5.15.2
+        make -j4
+        make install
+        cd ../gcc-x64-qt-static
+        make clean
+
+    - name: Deploy
+      run: |
+        cd qt5
+        tar -czvf gcc-x64-qt-static.tar.gz ./gcc-x64-qt-static
+
+    - name: Upload Qt 5.15.2 static
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: ./qt5/gcc-x64-qt-static.zip
+        token: ${{ secrets.ACCESS_TOKEN }}
+        commit: main
+        tag: gcc-x64-qt-5.15.2-static
