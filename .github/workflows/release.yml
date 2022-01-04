@@ -22,10 +22,11 @@ jobs:
       run: |
         curl -LO https://download.qt.io/official_releases/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.zip
         7z x qt-everywhere-src-5.15.2.zip -oqt5
+        mv qt5/qt-everywhere-src-5.15.2 qt5/sources
 
     - name: Patch qmake.conf
       run: |
-        cd ./qt5/qt-everywhere-src-5.15.2/qtbase/mkspecs/win32-g++/
+        cd ./qt5/sources/qtbase/mkspecs/win32-g++/
         echo QMAKE_LFLAGS += -static -static-libgcc >> qmake.conf
         echo QMAKE_CFLAGS_RELEASE -= -O2 >> qmake.conf
         echo QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer >> qmake.conf
@@ -33,19 +34,19 @@ jobs:
 
     - name: Configure
       run: | 
-        cd ./qt5/qt-everywhere-src-5.15.2
-        ./configure.bat -static -release -platform win32-g++ -opensource -confirm-license -prefix "../mingw32-x64-qt-static" -qt-zlib -qt-libpng -qt-webp -qt-libjpeg -qt-freetype -no-opengl -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtsensors -skip qtspeech -skip qtsvg -skip qtwayland -skip qtwebglplugin -skip qtwebview -skip webengine -make libs -nomake tools -nomake examples -nomake tests
+        cd ./qt5/sources
+        ./configure.bat -static -release -platform win32-g++ -opensource -confirm-license -prefix "../static" -qt-zlib -qt-libpng -qt-webp -qt-libjpeg -qt-freetype -no-opengl -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative -skip qtdoc -skip qtgamepad -skip qtlocation -skip qtlottie -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline -skip qtremoteobjects -skip qtscript -skip qtsensors -skip qtspeech -skip qtsvg -skip qtwayland -skip qtwebglplugin -skip qtwebview -skip webengine -make libs -nomake tools -nomake examples -nomake tests
 
     - name: Build Qt 5.15.2 static
       run: |
-        cd ./qt5/qt-everywhere-src-5.15.2
+        cd ./qt5/sources
         mingw32-make -j4
         mingw32-make install
 
     - name: Deploy
       run: |
         cd qt5
-        7z a mingw32-x64-qt-static.zip ./mingw32-x64-qt-static
+        7z a mingw32-x64-qt-static.zip ./static
 
     - name: Upload Qt 5.15.2 static
       uses: ncipollo/release-action@v1
@@ -96,7 +97,7 @@ jobs:
     - name: Upload Qt 5.15.2 static
       uses: ncipollo/release-action@v1
       with:
-        artifacts: ./qt5/gcc-x64-qt-static.zip
+        artifacts: ./qt5/gcc-x64-qt-static.tar.gz
         token: ${{ secrets.ACCESS_TOKEN }}
         commit: main
         tag: gcc-x64-qt-5.15.2-static
